@@ -1,7 +1,13 @@
+import Footer from "./components/Footer/Footer";
 import Header from "./components/Header/Header";
 
 function App() {
-  return <div><Header/></div>;
+  return (
+    <div>
+      <Header />
+      <Footer />
+    </div>
+  );
 }
 
 export default App;
