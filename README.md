@@ -1,2 +1,2 @@
-# data-generator
+# Data Generator
 A random data generator tool
