@@ -5,9 +5,9 @@ interface LayoutProps {
   children: React.ReactNode;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children }) => {
+const Layout: React.FC<LayoutProps> = ({ children, ...props }) => {
   return (
-    <div className="layout">
+    <div className="layout" {...props}>
       <div className="layout-content">
         {children}
       </div>
