@@ -1,19 +1,47 @@
 /**
- * Footer component that displays the current year and a copyright notice.
+ * A footer component that contains a Generate button for data generation.
+ * The button is disabled when any field in the data selector context has an empty name or data type.
  *
- * @returns {JSX.Element} The rendered footer component.
+ * @component
+ * @example
+ * return (
+ *   <Footer />
+ * )
+ *
+ * @returns A footer element containing a Generate button that triggers data generation when clicked
  */
 
-import "./Footer.css";
+import { useEffect, useState } from "react";
+import Button from "@mui/material/Button";
+
+import { useDataSelectorContext } from "../../context/DataSelectorContext";
+
+import styles from "./Footer.module.css";
 
 const Footer: React.FC = () => {
-  const currentYear = new Date().getFullYear();
+  const [disableGenerate, setDisableGenerate] = useState<Boolean>(true);
+  const { fields } = useDataSelectorContext();
+
+  const onGenerate = () => {
+    console.log("fields: ", fields);
+  };
+
+  useEffect(() => {
+    setDisableGenerate(
+      fields.some((field) => field.dataType === "" || field.name === "")
+    );
+  }, [fields]);
+
   return (
-    <footer className="footer">
-      <div className="footer-content">
-        <p className="footer-text">{`© ${currentYear} Data Generator`}</p>
-      </div>
-    </footer>
+    <div className={styles.container}>
+      <Button
+        variant="outlined"
+        onClick={onGenerate}
+        {...(disableGenerate ? { disabled: true } : {})}
+      >
+        Generate
+      </Button>
+    </div>
   );
 };
 

@@ -1,4 +1,4 @@
-import { type FC, useEffect, useState, useCallback, useMemo } from "react";
+import { type FC, useEffect, useCallback, useMemo } from "react";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 
@@ -7,12 +7,15 @@ import DataSelectorField from "./DataSelectorField";
 import DataSelectorHeader from "./DataSelectorHeader";
 
 import styles from "./DataSelector.module.css";
+import {
+  type FieldData,
+  useDataSelectorContext,
+} from "../../context/DataSelectorContext";
 
-const emptyField = { dataType: "", name: "" };
-const defaultFields = [emptyField];
+const emptyField: FieldData = { dataType: "", name: "" };
 
 const DataSelector: FC = () => {
-  const [fields, setFields] = useState(defaultFields);
+  const { fields, setFields } = useDataSelectorContext();
 
   const onTypeChange = useCallback((value: string, index: number) => {
     setFields((prevFields) =>
@@ -41,7 +44,7 @@ const DataSelector: FC = () => {
   };
 
   const renderedFields = useMemo(() => {
-    return fields.map((field, index) => (
+    return fields?.map((field, index) => (
       <DataSelectorField
         key={index}
         index={index}
@@ -65,7 +68,7 @@ const DataSelector: FC = () => {
           <DataSelectorHeader />
           {renderedFields}
           <Button
-          data-testid="add-new-row-button"
+            data-testid="add-new-row-button"
             variant="contained"
             startIcon={<AddIcon />}
             sx={{ width: 180, margin: "20px 0px 10px 0px" }}

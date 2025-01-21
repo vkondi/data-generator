@@ -15,14 +15,17 @@ import Footer from "./components/Footer/Footer";
 import Header from "./components/Header/Header";
 
 import "./App.css";
+import { DataSelectorProvider } from "./context/DataSelectorContext";
 
 function App() {
   return (
-    <div className="container">
-      <Header />
-      <DataSelector />
-      <Footer />
-    </div>
+    <DataSelectorProvider>
+      <div className="container">
+        <Header />
+        <DataSelector />
+        <Footer />
+      </div>
+    </DataSelectorProvider>
   );
 }
 

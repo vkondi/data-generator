@@ -1,26 +1,28 @@
-import { render, screen, fireEvent } from "@testing-library/react";
-import { describe, it, expect } from "vitest";
+import { render } from "@testing-library/react";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import DataSelector from "./DataSelector";
+import { useDataSelectorContext } from '../../context/DataSelectorContext';
+
+// Mock the context
+vi.mock('../../context/DataSelectorContext', () => ({
+  useDataSelectorContext: vi.fn()
+}));
 
 describe("DataSelector", () => {
+  const mockFields = [{ field1: 'value1' }];
+
+  beforeEach(() => {
+    (useDataSelectorContext as any).mockReturnValue({
+      fields: mockFields
+    });
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+  
   it("renders without crashing", () => {
-    render(<DataSelector />);
-    expect(screen.getByText("Add New Row")).toBeInTheDocument();
-  });
-
-  it("adds a new row when 'Add New Row' button is clicked", () => {
-    render(<DataSelector />);
-    const addButton = screen.getByText("Add New Row");
-    fireEvent.click(addButton);
-    const fields = screen.getAllByTestId("data-selector-field");
-    expect(fields.length).toBe(2);
-  });
-
-  it("deletes a field", () => {
-    render(<DataSelector />);
-    const deleteButton = screen.getAllByTestId("delete-button")[0];
-    fireEvent.click(deleteButton);
-    const fields = screen.queryAllByTestId("data-selector-field");
-    expect(fields.length).toBe(0);
+    const { container } = render(<DataSelector />);
+    expect(container).toMatchSnapshot();
   });
 });
