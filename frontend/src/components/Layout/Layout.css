@@ -1,0 +1,11 @@
+.layout {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .layout-content {
+    max-width: 1300px;
+    width: 100%;
+    background-color: rgb(246, 253, 253);
+  }
