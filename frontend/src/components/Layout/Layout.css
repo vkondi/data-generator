@@ -1,0 +1,10 @@
+.layout {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .layout-content {
+    max-width: 800px;
+    width: 100%;
+  }

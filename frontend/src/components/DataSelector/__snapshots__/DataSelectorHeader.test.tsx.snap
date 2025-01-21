@@ -1,0 +1,34 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`DataSelectorHeader > renders without crashing 1`] = `
+<div>
+  <div
+    class="_container_66254c"
+  >
+    <div
+      class="MuiFormControl-root css-vav2vq-MuiFormControl-root"
+    >
+      <label
+        class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeMedium MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeMedium MuiInputLabel-outlined css-19qnlrw-MuiFormLabel-root-MuiInputLabel-root"
+        data-shrink="false"
+      >
+        Data Type
+      </label>
+    </div>
+    <div
+      class="MuiFormControl-root css-vav2vq-MuiFormControl-root"
+    >
+      <label
+        class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeMedium MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeMedium MuiInputLabel-outlined css-19qnlrw-MuiFormLabel-root-MuiInputLabel-root"
+        data-shrink="false"
+      >
+        Field Name
+      </label>
+    </div>
+    <div
+      class="_deleteIconSpacer_66254c"
+      data-testid="delete-icon-spacer"
+    />
+  </div>
+</div>
+`;

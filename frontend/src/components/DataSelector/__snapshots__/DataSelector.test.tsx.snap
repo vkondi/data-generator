@@ -1,0 +1,200 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`DataSelector > renders without crashing 1`] = `
+<div>
+  <div
+    class="_container_61e5d5"
+  >
+    <div
+      class="layout"
+    >
+      <div
+        class="layout-content"
+      >
+        <div
+          class="_layoutContainer_61e5d5"
+        >
+          <div
+            class="_container_66254c"
+          >
+            <div
+              class="MuiFormControl-root css-vav2vq-MuiFormControl-root"
+            >
+              <label
+                class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeMedium MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeMedium MuiInputLabel-outlined css-19qnlrw-MuiFormLabel-root-MuiInputLabel-root"
+                data-shrink="false"
+              >
+                Data Type
+              </label>
+            </div>
+            <div
+              class="MuiFormControl-root css-vav2vq-MuiFormControl-root"
+            >
+              <label
+                class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeMedium MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeMedium MuiInputLabel-outlined css-19qnlrw-MuiFormLabel-root-MuiInputLabel-root"
+                data-shrink="false"
+              >
+                Field Name
+              </label>
+            </div>
+            <div
+              class="_deleteIconSpacer_66254c"
+              data-testid="delete-icon-spacer"
+            />
+          </div>
+          <div
+            class="_container_27718c"
+          >
+            <div
+              class="MuiFormControl-root css-8p96bl-MuiFormControl-root"
+            >
+              <label
+                class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeSmall MuiInputLabel-outlined css-1kfabtt-MuiFormLabel-root-MuiInputLabel-root"
+                data-shrink="false"
+                data-testid="data-type-input"
+                id="demo-simple-select-label"
+              >
+                Data Type
+              </label>
+              <div
+                class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall MuiSelect-root css-sc8y68-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
+                data-testid="data-selector-field"
+              >
+                <div
+                  aria-expanded="false"
+                  aria-haspopup="listbox"
+                  aria-labelledby="demo-simple-select-label demo-simple-select"
+                  class="MuiSelect-select MuiSelect-outlined MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall css-si86to-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
+                  id="demo-simple-select"
+                  role="combobox"
+                  tabindex="0"
+                >
+                  <span
+                    aria-hidden="true"
+                    class="notranslate"
+                  >
+                    ​
+                  </span>
+                </div>
+                <input
+                  aria-hidden="true"
+                  aria-invalid="false"
+                  class="MuiSelect-nativeInput css-j0riat-MuiSelect-nativeInput"
+                  tabindex="-1"
+                  value=""
+                />
+                <svg
+                  aria-hidden="true"
+                  class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-lohd6h-MuiSvgIcon-root-MuiSelect-icon"
+                  data-testid="ArrowDropDownIcon"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M7 10l5 5 5-5z"
+                  />
+                </svg>
+                <fieldset
+                  aria-hidden="true"
+                  class="MuiOutlinedInput-notchedOutline css-1ll44ll-MuiOutlinedInput-notchedOutline"
+                >
+                  <legend
+                    class="css-81qg8w"
+                  >
+                    <span>
+                      Data Type
+                    </span>
+                  </legend>
+                </fieldset>
+              </div>
+            </div>
+            <div
+              class="MuiFormControl-root MuiTextField-root css-1lx7w30-MuiFormControl-root-MuiTextField-root"
+              data-testid="name-input"
+            >
+              <label
+                class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeSmall MuiInputLabel-outlined css-1kfabtt-MuiFormLabel-root-MuiInputLabel-root"
+                data-shrink="false"
+                for="outlined-basic"
+                id="outlined-basic-label"
+              >
+                Field Name
+              </label>
+              <div
+                class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
+              >
+                <input
+                  aria-invalid="false"
+                  class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall css-1pzfmz2-MuiInputBase-input-MuiOutlinedInput-input"
+                  id="outlined-basic"
+                  type="text"
+                  value=""
+                />
+                <fieldset
+                  aria-hidden="true"
+                  class="MuiOutlinedInput-notchedOutline css-1ll44ll-MuiOutlinedInput-notchedOutline"
+                >
+                  <legend
+                    class="css-81qg8w"
+                  >
+                    <span>
+                      Field Name
+                    </span>
+                  </legend>
+                </fieldset>
+              </div>
+            </div>
+            <button
+              aria-label="delete"
+              class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-155wbr6-MuiButtonBase-root-MuiIconButton-root"
+              data-testid="delete-button"
+              id=":r2:"
+              tabindex="0"
+              type="button"
+            >
+              <span
+                class="MuiIconButton-loadingIndicator css-165vu30-MuiIconButton-loadingIndicator"
+              />
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeInherit css-1ckov0h-MuiSvgIcon-root"
+                data-testid="DeleteIcon"
+                focusable="false"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6zM19 4h-3.5l-1-1h-5l-1 1H5v2h14z"
+                />
+              </svg>
+            </button>
+          </div>
+          <button
+            class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-2souiu-MuiButtonBase-root-MuiButton-root"
+            data-testid="add-new-row-button"
+            id=":r3:"
+            tabindex="0"
+            type="button"
+          >
+            <span
+              class="MuiButton-icon MuiButton-startIcon MuiButton-iconSizeMedium css-1sh91j5-MuiButton-startIcon"
+            >
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1umw9bq-MuiSvgIcon-root"
+                data-testid="AddIcon"
+                focusable="false"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6z"
+                />
+              </svg>
+            </span>
+            Add New Row
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

@@ -1,0 +1,38 @@
+.header {
+    background-color: #f0f0f0; 
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .header-content {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .header-title {
+    margin: 0;
+  }
+  
+  .header-nav {
+    display: flex;
+    align-items: center;
+  }
+  
+  .nav-link {
+    margin-left: 15px;
+    text-decoration: none;
+    color: #333;
+  }
+  
+  .nav-link:hover {
+    text-decoration: underline;
+  }
+  
+  .settings-icon {
+    margin-left: 15px;
+    cursor: pointer;
+  }

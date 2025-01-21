@@ -1,0 +1,13 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    padding: 5px 5px;
+    justify-content: space-between;
+    column-gap: 10px;
+    border-bottom: 1px solid black;
+}
+
+.deleteIconSpacer {
+    height: 40px;
+    width: 28px;
+}
