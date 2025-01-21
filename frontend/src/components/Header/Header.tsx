@@ -14,7 +14,7 @@
  */
 
 import React from "react";
-import { FaCog } from "react-icons/fa";
+import SettingsIcon from "@mui/icons-material/Settings";
 import "./Header.css";
 
 const Header: React.FC = () => {
@@ -25,7 +25,7 @@ const Header: React.FC = () => {
         <nav className="header-nav">
           <div className="nav-link">Generator</div>
           <span className="settings-icon" data-testid="settings-icon">
-            <FaCog />
+            <SettingsIcon />
           </span>
         </nav>
       </div>
