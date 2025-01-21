@@ -11,7 +11,7 @@ const DataSelectorHeader: React.FC = () => {
       <FormControl variant="outlined" sx={{ flex: 1,borderRight: '1px solid #e0e0e0' }}>
         <InputLabel>Field Name</InputLabel>
       </FormControl>
-      <div className={styles.deleteIconSpacer}></div>
+      <div className={styles.deleteIconSpacer} data-testid="delete-icon-spacer"></div>
     </div>
   );
 };

@@ -1,3 +1,19 @@
+/**
+ * DataSelectorField component allows users to select a data type and provide a name for the field.
+ * It also provides an option to delete the field.
+ *
+ * @component
+ * @param {Object} props - The properties object.
+ * @param {function} props.onTypeChange - Callback function to handle changes in the data type selection.
+ * @param {function} props.onNameChange - Callback function to handle changes in the field name input.
+ * @param {function} props.onDelete - Callback function to handle the deletion of the field.
+ * @param {number} props.index - The index of the current field in the list.
+ * @param {string} props.dataTypeValue - The current value of the data type selection.
+ * @param {string} props.nameValue - The current value of the field name input.
+ *
+ * @returns {JSX.Element} The rendered DataSelectorField component.
+ */
+
 import React from "react";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
@@ -81,27 +97,37 @@ const DataSelectorField: React.FC<DataTypeFieldProps> = ({
 
   return (
     <div className={styles.container}>
-      <FormControl variant="outlined" sx={{ flex: 1 }}>
-        <InputLabel id="demo-simple-select-label">Data Type</InputLabel>
+      <FormControl variant="outlined" sx={{ flex: 1 }} size="small">
+        <InputLabel data-testid="data-type-input" id="demo-simple-select-label">
+          Data Type
+        </InputLabel>
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           value={dataTypeValue}
           label="Data Type"
           onChange={handleTypeChange}
+          data-testid="data-selector-field"
         >
           {renderMenuItems()}
         </Select>
       </FormControl>
       <TextField
+        data-testid="name-input"
         id="outlined-basic"
         label="Field Name"
         variant="outlined"
         sx={{ flex: 1 }}
         onChange={handleNameChange}
         value={nameValue}
+        size="small"
       />
-      <IconButton aria-label="delete" size="large" onClick={handleDelete}>
+      <IconButton
+        aria-label="delete"
+        size="small"
+        onClick={handleDelete}
+        data-testid="delete-button"
+      >
         <DeleteIcon fontSize="inherit" />
       </IconButton>
     </div>
