@@ -46,11 +46,15 @@ const DATA_TYPES = [
   { id: "macAddress", label: "MAC Address" },
 ];
 const UNSUPPORTED_DATA_TYPES = [
-  "url",
-  "macAddress",
-  "ipAddress",
-  "uuid",
+  "number",
+  "address",
+  "city",
+  "country",
+  "zipCode",
   "jobTitle",
+  "uuid",
+  "ipAddress",
+  "macAddress",
 ];
 
 interface DataTypeFieldProps {

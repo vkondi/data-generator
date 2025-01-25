@@ -1,5 +1,6 @@
 import pandas as pd # For working with tabular data
 from fastapi import FastAPI, HTTPException, BackgroundTasks # FastAPI framework for building APIs
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse # For sending files as response
 from pydantic import BaseModel # For validating and parsing request body
 from faker import Faker # For generating fake data
@@ -9,6 +10,19 @@ from datetime import datetime
 
 # Create a FastAPI instance
 app = FastAPI()
+
+# Configure CORS
+origins = [
+    "http://localhost:5173",  # Add your frontend URL here
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Create a Faker instance for generating fake data
 faker = Faker()
@@ -33,7 +47,7 @@ DATA_GENERATORS = {
 
 # Define the structure of request body for data generation
 class DataRequest(BaseModel):
-    fields: list[dict] # List of fields where each field has a name and type
+    fields: list[dict] # List of fields where each field has a name and dataType
     count: int # Number of records to generate
     file_format: Optional[Literal["csv", "json", "xlsx", "xml", "html"]] = "csv" # File format to export the data
     
@@ -51,7 +65,7 @@ def generate(data_request: DataRequest):
         # Process each field in the request
         for field in data_request.fields:
             field_name = field["name"] # Get the name of the field
-            field_type = field["type"]  # Get the type of the field
+            field_type = field["dataType"]  # Get the type of the field
             generator = DATA_GENERATORS.get(field_type) # Get the corresponding data generator
             
             # Check if the field type is valid
