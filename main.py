@@ -1,9 +1,11 @@
 import pandas as pd # For working with tabular data
-from fastapi import FastAPI, Form # FastAPI framework for building APIs
+from fastapi import FastAPI, HTTPException, BackgroundTasks # FastAPI framework for building APIs
 from fastapi.responses import FileResponse # For sending files as response
 from pydantic import BaseModel # For validating and parsing request body
 from faker import Faker # For generating fake data
 import os # For working with file paths
+from typing import Optional, Literal
+from datetime import datetime
 
 # Create a FastAPI instance
 app = FastAPI()
@@ -33,6 +35,7 @@ DATA_GENERATORS = {
 class DataRequest(BaseModel):
     fields: list[dict] # List of fields where each field has a name and type
     count: int # Number of records to generate
+    file_format: Optional[Literal["csv", "json", "xlsx", "xml", "html"]] = "csv" # File format to export the data
     
 @app.post("/generate")
 def generate(data_request: DataRequest):
@@ -53,7 +56,8 @@ def generate(data_request: DataRequest):
             
             # Check if the field type is valid
             if not generator:
-                return {"error": f"Unknown field type: {field_type}"}
+                valid_types = ", ".join(DATA_GENERATORS.keys())
+                return {"error": f"Unknown field type: {field_type}. Valid types are: {valid_types}"}
             
             # Handle auto incrementing fields separately
             if field_type == "auto_increment":
@@ -65,3 +69,55 @@ def generate(data_request: DataRequest):
             
     # Return the generated records as response
     return {"data": records}
+
+@app.post("/export")
+def export_data(data_request: DataRequest, background_tasks: BackgroundTasks):
+    """
+    Generate and export data to a file in the specified format
+    """
+    
+    # Generate data based on the request
+    records = generate(data_request)
+    
+    # Check if the data generation was successful
+    if "error" in records:
+        return records
+    
+    # Convert the generated data to a DataFrame
+    df = pd.DataFrame(records["data"])
+    
+    # Get the requested file format and convert it to lowercase
+    file_format = data_request.file_format.lower()
+    
+    # Get the current date and time
+    current_datetime = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    
+    # Define the file name based on the requested format
+    file_name = f"generated_data_{current_datetime}.{file_format}"
+    temp_dir = os.path.join(os.getcwd(), 'temp')
+    file_path = os.path.join(temp_dir, file_name)
+    
+    # Ensure the directory exists
+    os.makedirs(temp_dir, exist_ok=True)
+    
+    # Convert the data to the requested file format
+    if file_format == "csv":
+        df.to_csv(file_path, index=False, encoding='utf-8') # save as csv without index and specify encoding
+    elif file_format == "json":
+        df.to_json(file_path, orient="records", force_ascii=False) # save as a JSON file with records format and specify encoding
+    elif file_format == "xlsx":
+        df.to_excel(file_path, index=False)
+    elif file_format == "xml":
+        df.columns = [col.replace(" ", "_") for col in df.columns] # Replace spaces with underscores in column names
+        df.to_xml(file_path, root_name="data", row_name="record")
+    elif file_format == 'html':
+        df.to_html(file_path, index=False)
+    else:
+        raise HTTPException(status_code=400, detail=f"Unsupported file format: {file_format}")
+    
+    # Add a background task to delete the file after sending it
+    background_tasks.add_task(os.remove, file_path)
+    
+    # Return the generated file as response
+    response = FileResponse(file_path, media_type="application/octet-stream", filename=file_name)
+    return response
