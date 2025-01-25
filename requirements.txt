@@ -1,0 +1,7 @@
+fastapi==0.115.6
+pydantic==2.10.5
+faker==33.3.1
+pandas==2.2.3
+uvicorn==0.34.0
+openpyxl==3.1.5
+lxml==5.3.0
