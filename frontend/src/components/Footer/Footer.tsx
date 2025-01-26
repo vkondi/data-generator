@@ -22,6 +22,8 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 import { EXPORT_URL } from "../../utils/URL";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 
 const FILE_FORMAT_OPTIONS = [
   { id: "csv", label: "CSV" },
@@ -32,6 +34,16 @@ const FILE_FORMAT_OPTIONS = [
 ];
 
 const Footer: React.FC = () => {
+  const [showToast, setShowToast] = useState<{
+    severity: "success" | "error" | "warning" | "info";
+    message: string;
+    show: boolean;
+  }>({
+    severity: "success",
+    message: "Data generated successfully!",
+    show: false,
+  });
+  const [loading, setLoading] = useState<boolean>(false);
   const [countField, setCountField] = useState({
     count: 10,
     error: false,
@@ -43,6 +55,8 @@ const Footer: React.FC = () => {
 
   const onGenerate = async () => {
     try {
+      setLoading(true);
+
       const response = await axios.post(
         EXPORT_URL,
         {
@@ -69,8 +83,22 @@ const Footer: React.FC = () => {
       link.setAttribute("download", fileName);
       document.body.appendChild(link);
       link.click();
+
+      setShowToast({
+        severity: "success",
+        message: "Data generated successfully!",
+        show: true,
+      });
     } catch (error) {
       console.error("Error generating data:", error);
+
+      setShowToast({
+        severity: "error",
+        message: "Failed to generate data!",
+        show: true,
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -98,9 +126,14 @@ const Footer: React.FC = () => {
     }
   };
 
+  const handleToastClose = () => {
+    setShowToast({ ...showToast, show: false });
+  };
+
   useEffect(() => {
     setDisableGenerate(
-      fields.some((field) => field.dataType === "" || field.name === "")
+      fields.some((field) => field.dataType === "" || field.name === "") ||
+        fields.length === 0
     );
   }, [fields]);
 
@@ -110,6 +143,9 @@ const Footer: React.FC = () => {
         variant="outlined"
         onClick={onGenerate}
         {...(disableGenerate ? { disabled: true } : {})}
+        sx={{ backgroundColor: "#b60f0f", color: "white", border: "0px" }}
+        loading={loading}
+        loadingPosition="start"
       >
         Generate
       </Button>
@@ -137,6 +173,22 @@ const Footer: React.FC = () => {
           </MenuItem>
         ))}
       </Select>
+
+      {/* Toast component */}
+      <Snackbar
+        open={showToast.show}
+        autoHideDuration={3000}
+        onClose={handleToastClose}
+      >
+        <Alert
+          onClose={handleToastClose}
+          severity={showToast.severity}
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {showToast.message}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

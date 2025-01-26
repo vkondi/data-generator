@@ -1,6 +1,12 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, expect, vi, beforeEach, test } from "vitest";
 import DataSelectorField from "./DataSelectorField";
+import { useDataSelectorContext } from "../../context/DataSelectorContext";
+
+// Mock the context
+vi.mock('../../context/DataSelectorContext', () => ({
+  useDataSelectorContext: vi.fn()
+}));
 
 describe("DataSelectorField", () => {
   const mockOnTypeChange = vi.fn();
@@ -18,6 +24,9 @@ describe("DataSelectorField", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    (useDataSelectorContext as any).mockReturnValue({
+      allowedDataTypes: ['name', 'phone', 'number']
+    });
   });
 
   test("renders DataSelectorField component", () => {

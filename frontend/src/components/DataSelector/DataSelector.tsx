@@ -20,9 +20,7 @@ const DataSelector: FC = () => {
   const onTypeChange = useCallback((value: string, index: number) => {
     setFields((prevFields) =>
       prevFields.map((field, i) =>
-        i === index
-          ? { ...field, dataType: value, name: field.name || value }
-          : field
+        i === index ? { ...field, dataType: value, name: value } : field
       )
     );
   }, []);
