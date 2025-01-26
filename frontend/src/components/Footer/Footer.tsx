@@ -21,6 +21,7 @@ import axios from "axios";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
+import { EXPORT_URL } from "../../utils/URL";
 
 const FILE_FORMAT_OPTIONS = [
   { id: "csv", label: "CSV" },
@@ -37,13 +38,13 @@ const Footer: React.FC = () => {
     helperText: "",
   });
   const [fileFormat, setFileFormat] = useState<string>("csv");
-  const [disableGenerate, setDisableGenerate] = useState<Boolean>(true);
+  const [disableGenerate, setDisableGenerate] = useState<boolean>(true);
   const { fields } = useDataSelectorContext();
 
   const onGenerate = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:8000/export",
+        EXPORT_URL,
         {
           fields,
           count: countField.count,
@@ -51,13 +52,21 @@ const Footer: React.FC = () => {
         },
         { responseType: "blob" }
       );
+
+      // Extract filename from Content-Disposition header
+      let fileName = `generated_data_${new Date().getTime()}.${fileFormat}`;
+      const contentDisposition = response?.headers?.["content-disposition"];
+      if (contentDisposition) {
+        const match = contentDisposition.match(/filename="?(.+)"?/);
+        if (match) {
+          fileName = match[1];
+        }
+      }
+
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute(
-        "download",
-        `generated_data_${new Date().getTime()}.${fileFormat}`
-      );
+      link.setAttribute("download", fileName);
       document.body.appendChild(link);
       link.click();
     } catch (error) {

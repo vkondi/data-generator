@@ -1,3 +1,4 @@
+import axios from "axios";
 import {
   createContext,
   Dispatch,
@@ -5,8 +6,10 @@ import {
   PropsWithChildren,
   SetStateAction,
   useContext,
+  useEffect,
   useState,
 } from "react";
+import { GET_CONFIG_URL } from "../utils/URL";
 
 export type FieldData = {
   dataType: string;
@@ -16,6 +19,7 @@ export type FieldData = {
 type DataSelectorContextProps = {
   fields: FieldData[];
   setFields: Dispatch<SetStateAction<FieldData[]>>;
+  allowedDataTypes: string[];
 };
 
 const emptyField: FieldData = { dataType: "", name: "" };
@@ -28,10 +32,24 @@ const DataSelectorContext = createContext<DataSelectorContextProps | undefined>(
 export const DataSelectorProvider: FC<PropsWithChildren> = ({
   children,
 }): JSX.Element => {
+  const [allowedDataTypes, setAllowedDataTypes] = useState<string[]>([]);
   const [fields, setFields] = useState<FieldData[]>(defaultFields);
 
+  const fetchConfig = async () => {
+      try {
+        const response = await axios.get(GET_CONFIG_URL);
+        setAllowedDataTypes(response?.data?.allowedDataTypes ?? []);
+      } catch (error) {
+        console.error("Failed to fetch config:", error);
+      }
+    };
+
+  useEffect(() => {
+    fetchConfig();
+  }, []);
+
   return (
-    <DataSelectorContext.Provider value={{ fields, setFields }}>
+    <DataSelectorContext.Provider value={{ fields, setFields, allowedDataTypes }}>
       {children}
     </DataSelectorContext.Provider>
   );
