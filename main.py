@@ -8,6 +8,7 @@ from faker import Faker # For generating fake data
 import os # For working with file paths
 from typing import Optional, Literal
 from datetime import datetime
+from fastapi.staticfiles import StaticFiles
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -37,18 +38,26 @@ faker = Faker()
 DATA_GENERATORS = {
     "name": faker.name, # Generate random name
     "phone": faker.phone_number, # Generate random phone number
-    "email": faker.email, # Generate random email
+    "number": lambda: faker.random_int(min=0, max=100), # Generate random number in a range
+    "boolean": faker.boolean, # Generate random boolean value
     "date": faker.date, # Generate random date
+    "email": faker.email, # Generate random email
     "time": faker.time, # Generate random time
+    "address": faker.address, # Generate random address
+    "city": faker.city, # Generate random city name
+    "country": faker.country, # Generate random country name
+    "zipCode": faker.zipcode, # Generate random ZIP code
     "company": faker.company, # Generate random company name
+    "jobTitle": faker.job, # Generate random job title
+    "color": faker.color_name, # Generate random color name
+    "uuid": faker.uuid4, # Generate random UUID
+    "url": faker.url, # Generate random URL
+    "ipAddress": faker.ipv4, # Generate random IP address
+    "macAddress": faker.mac_address, # Generate random MAC address
     "constant": lambda: "Constant Value", # Generate constant value
     "list": lambda: faker.random_element(["A", "B", "C"]), # Generate random element from list
     "alphanumeric": faker.bothify, # Generate a random alphanumeric string
-    "boolean": faker.boolean, # Generate random boolean value
     "auto_increment": lambda n: n, # Generate auto incrementing number
-    "number": lambda: faker.random_int(min=0, max=100), # Generate random number in a range
-    "color": faker.color_name, # Generate random color name
-    "url": faker.url, # Generate random URL
 }
 
 # Define the structure of request body for data generation
@@ -149,3 +158,7 @@ def export_data(data_request: DataRequest, background_tasks: BackgroundTasks):
     
     # Return the generated file as response
     return FileResponse(file_path, media_type="application/octet-stream", filename=file_name, headers={"Content-Disposition": f"attachment; filename={file_name}"})
+
+
+# Mount the React build directory for default route
+app.mount("/", StaticFiles(directory="frontend/dist", html=True), name="static")
