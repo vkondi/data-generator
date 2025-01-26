@@ -1,4 +1,4 @@
-import { type FC, useEffect, useCallback, useMemo } from "react";
+import { type FC, useCallback, useMemo } from "react";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 
@@ -56,10 +56,6 @@ const DataSelector: FC = () => {
       />
     ));
   }, [fields, onTypeChange, onNameChange, onDelete]);
-
-  useEffect(() => {
-    console.log("fields: ", fields);
-  }, [fields]);
 
   return (
     <div className={styles.container}>

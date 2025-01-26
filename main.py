@@ -1,5 +1,7 @@
+import logging
 import pandas as pd # For working with tabular data
 from fastapi import FastAPI, HTTPException, BackgroundTasks # FastAPI framework for building APIs
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse # For sending files as response
 from pydantic import BaseModel # For validating and parsing request body
 from faker import Faker # For generating fake data
@@ -7,8 +9,26 @@ import os # For working with file paths
 from typing import Optional, Literal
 from datetime import datetime
 
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 # Create a FastAPI instance
 app = FastAPI()
+
+# Configure CORS
+origins = [
+    "http://localhost:5173",  # Add your frontend URL here
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+    expose_headers=["Content-Disposition"],
+)
 
 # Create a Faker instance for generating fake data
 faker = Faker()
@@ -26,16 +46,23 @@ DATA_GENERATORS = {
     "alphanumeric": faker.bothify, # Generate a random alphanumeric string
     "boolean": faker.boolean, # Generate random boolean value
     "auto_increment": lambda n: n, # Generate auto incrementing number
-    "number_range": lambda: faker.random_int(min=0, max=100), # Generate random number in a range
+    "number": lambda: faker.random_int(min=0, max=100), # Generate random number in a range
     "color": faker.color_name, # Generate random color name
     "url": faker.url, # Generate random URL
 }
 
 # Define the structure of request body for data generation
 class DataRequest(BaseModel):
-    fields: list[dict] # List of fields where each field has a name and type
+    fields: list[dict] # List of fields where each field has a name and dataType
     count: int # Number of records to generate
     file_format: Optional[Literal["csv", "json", "xlsx", "xml", "html"]] = "csv" # File format to export the data
+
+@app.get("/get-config")
+def getConfig():
+    """
+    Get the configurations for generating data
+    """
+    return { "message": "success", "allowedDataTypes": list(DATA_GENERATORS) }
     
 @app.post("/generate")
 def generate(data_request: DataRequest):
@@ -51,7 +78,7 @@ def generate(data_request: DataRequest):
         # Process each field in the request
         for field in data_request.fields:
             field_name = field["name"] # Get the name of the field
-            field_type = field["type"]  # Get the type of the field
+            field_type = field["dataType"]  # Get the type of the field
             generator = DATA_GENERATORS.get(field_type) # Get the corresponding data generator
             
             # Check if the field type is valid
@@ -115,9 +142,10 @@ def export_data(data_request: DataRequest, background_tasks: BackgroundTasks):
     else:
         raise HTTPException(status_code=400, detail=f"Unsupported file format: {file_format}")
     
+    logger.info(f"\nfile_format: {file_format}\file_name: {file_name}")
+    
     # Add a background task to delete the file after sending it
     background_tasks.add_task(os.remove, file_path)
     
     # Return the generated file as response
-    response = FileResponse(file_path, media_type="application/octet-stream", filename=file_name)
-    return response
+    return FileResponse(file_path, media_type="application/octet-stream", filename=file_name, headers={"Content-Disposition": f"attachment; filename={file_name}"})

@@ -24,6 +24,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import styles from "./DataSelectorField.module.css";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
+import { useDataSelectorContext } from "../../context/DataSelectorContext";
 
 const DATA_TYPES = [
   { id: "name", label: "Name" },
@@ -45,13 +46,6 @@ const DATA_TYPES = [
   { id: "ipAddress", label: "IP Address" },
   { id: "macAddress", label: "MAC Address" },
 ];
-const UNSUPPORTED_DATA_TYPES = [
-  "url",
-  "macAddress",
-  "ipAddress",
-  "uuid",
-  "jobTitle",
-];
 
 interface DataTypeFieldProps {
   onTypeChange: (value: string, index: number) => void;
@@ -70,6 +64,8 @@ const DataSelectorField: React.FC<DataTypeFieldProps> = ({
   dataTypeValue,
   nameValue,
 }) => {
+  const { allowedDataTypes } = useDataSelectorContext();
+  
   const handleDelete = () => {
     onDelete(index);
   };
@@ -88,7 +84,7 @@ const DataSelectorField: React.FC<DataTypeFieldProps> = ({
       <MenuItem
         key={dataType.id}
         value={dataType.id}
-        disabled={UNSUPPORTED_DATA_TYPES.includes(dataType.id)}
+        disabled={!allowedDataTypes.includes(dataType.id)}
       >
         {dataType.label}
       </MenuItem>
