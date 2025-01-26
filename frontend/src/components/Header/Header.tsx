@@ -2,7 +2,7 @@
  * Header component that displays the main header of the application.
  *
  * This component includes:
- * - A title "Data Generator"
+ * - A title "Rapid Data"
  * - A navigation section with a "Generator" link
  * - A settings icon
  *

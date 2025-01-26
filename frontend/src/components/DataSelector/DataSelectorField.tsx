@@ -84,7 +84,7 @@ const DataSelectorField: React.FC<DataTypeFieldProps> = ({
       <MenuItem
         key={dataType.id}
         value={dataType.id}
-        disabled={!allowedDataTypes.includes(dataType.id)}
+        disabled={!allowedDataTypes?.includes(dataType.id)}
       >
         {dataType.label}
       </MenuItem>

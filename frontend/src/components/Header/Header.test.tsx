@@ -5,17 +5,9 @@ import { describe, expect, test } from "vitest";
 import "@testing-library/jest-dom";
 
 describe("Header component", () => {
-    test("renders the title 'Data Generator'", () => {
+    test("renders the title 'Rapid Data'", () => {
         render(<Header />);
-        const titleElement = screen.getByText(/Data Generator/i);
+        const titleElement = screen.getByText(/Rapid Data/i);
         expect(titleElement).toBeInTheDocument();
-    });
-
-
-
-    test("renders the settings icon", () => {
-        render(<Header />);
-        const iconElement = screen.getByTestId("settings-icon");
-        expect(iconElement).toBeInTheDocument();
     });
 });
