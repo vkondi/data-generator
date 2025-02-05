@@ -11,7 +11,7 @@ Make sure you have the following installed:
 - [Node.js](https://nodejs.org/) (version 14 or higher)
 - [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
 
-### Installation
+### Frontend Installation
 
 1. Navigate to the `frontend` directory:
 
@@ -142,6 +142,40 @@ export default defineConfig({
   },
 })
 ```
+
+## Python Installation
+
+1. Navigate to root folder:
+    ```sh
+    cd <root-folder>
+    ```
+
+2. Create a virtual environment:
+    ```sh
+    python -m venv env
+    ```
+
+3. Activate the virtual environment:
+    - On Windows:
+        ```sh
+        .\env\Scripts\activate
+        ```
+    - On macOS/Linux:
+        ```sh
+        source env/bin/activate
+        ```
+
+4. Install the required libraries:
+    ```sh
+    pip install -r requirements.txt
+    ```
+
+## Running Server
+
+1. Run the script:
+    ```sh
+    uvicorn main:app --reload 
+    ```
 
 ## License
 
