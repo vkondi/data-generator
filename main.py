@@ -17,14 +17,8 @@ logger = logging.getLogger(__name__)
 # Create a FastAPI instance
 app = FastAPI()
 
-# Configure CORS
-origins = [
-    "http://localhost:5173",  # Add your frontend URL here
-]
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -38,7 +32,7 @@ faker = Faker()
 DATA_GENERATORS = {
     "name": faker.name, # Generate random name
     "phone": faker.phone_number, # Generate random phone number
-    "number": lambda: faker.random_int(min=0, max=100), # Generate random number in a range
+    "number": lambda: faker.random_int(min=10000, max=100000), # Generate random number in a range
     "boolean": faker.boolean, # Generate random boolean value
     "date": faker.date, # Generate random date
     "email": faker.email, # Generate random email
@@ -66,7 +60,7 @@ class DataRequest(BaseModel):
     count: int # Number of records to generate
     file_format: Optional[Literal["csv", "json", "xlsx", "xml", "html"]] = "csv" # File format to export the data
 
-@app.get("/get-config")
+@app.get("/api/get-config")
 def getConfig():
     """
     Get the configurations for generating data
@@ -104,9 +98,9 @@ def generate(data_request: DataRequest):
         records.append(row) # Add the generated record to the list of records
             
     # Return the generated records as response
-    return {"data": records}
+    return records
 
-@app.post("/export")
+@app.post("/api/export")
 def export_data(data_request: DataRequest, background_tasks: BackgroundTasks):
     """
     Generate and export data to a file in the specified format
@@ -120,7 +114,7 @@ def export_data(data_request: DataRequest, background_tasks: BackgroundTasks):
         return records
     
     # Convert the generated data to a DataFrame
-    df = pd.DataFrame(records["data"])
+    df = pd.DataFrame(records)
     
     # Get the requested file format and convert it to lowercase
     file_format = data_request.file_format.lower()
@@ -158,7 +152,6 @@ def export_data(data_request: DataRequest, background_tasks: BackgroundTasks):
     
     # Return the generated file as response
     return FileResponse(file_path, media_type="application/octet-stream", filename=file_name, headers={"Content-Disposition": f"attachment; filename={file_name}"})
-
 
 # Mount the React build directory for default route
 app.mount("/", StaticFiles(directory="frontend/dist", html=True), name="static")
