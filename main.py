@@ -2,13 +2,13 @@ import logging
 import pandas as pd # For working with tabular data
 from fastapi import FastAPI, HTTPException, BackgroundTasks # FastAPI framework for building APIs
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse # For sending files as response
+from fastapi.responses import StreamingResponse # For sending files as response
 from pydantic import BaseModel # For validating and parsing request body
 from faker import Faker # For generating fake data
-import os # For working with file paths
 from typing import Optional, Literal
 from datetime import datetime
 from fastapi.staticfiles import StaticFiles
+import io
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -119,39 +119,49 @@ def export_data(data_request: DataRequest, background_tasks: BackgroundTasks):
     # Get the requested file format and convert it to lowercase
     file_format = data_request.file_format.lower()
     
-    # Get the current date and time
-    current_datetime = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    
-    # Define the file name based on the requested format
-    file_name = f"generated_data_{current_datetime}.{file_format}"
-    temp_dir = os.path.join(os.getcwd(), 'temp')
-    file_path = os.path.join(temp_dir, file_name)
-    
-    # Ensure the directory exists
-    os.makedirs(temp_dir, exist_ok=True)
+    # Use an in-memory buffer for storing file content
+    buffer = io.BytesIO() if file_format == "xlsx" else io.StringIO()
     
     # Convert the data to the requested file format
     if file_format == "csv":
-        df.to_csv(file_path, index=False, encoding='utf-8') # save as csv without index and specify encoding
+        df.to_csv(buffer, index=False, encoding='utf-8') # save as csv without index and specify encoding
+        media_type = "text/csv"
+        extension = "csv"
     elif file_format == "json":
-        df.to_json(file_path, orient="records", force_ascii=False) # save as a JSON file with records format and specify encoding
+        df.to_json(buffer, orient="records", force_ascii=False) # save as a JSON file with records format and specify encoding
+        media_type = "application/json"
+        extension = "json"
     elif file_format == "xlsx":
-        df.to_excel(file_path, index=False)
+        with pd.ExcelWriter(buffer, engine="xlsxwriter") as writer:
+            df.to_excel(writer, index=False)  # Save as Excel file without index
+        media_type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        extension = "xlsx"
     elif file_format == "xml":
-        df.columns = [col.replace(" ", "_") for col in df.columns] # Replace spaces with underscores in column names
-        df.to_xml(file_path, root_name="data", row_name="record")
+        df.columns = [col.replace(" ", "_") for col in df.columns]  # Replace spaces with underscores in column names
+        xml_data = df.to_xml(root_name="data", row_name="record", encoding="utf-8")  # Generate XML as bytes
+        xml_data = xml_data.decode("utf-8") if isinstance(xml_data, bytes) else xml_data  # Ensure it's a string
+        buffer.write(xml_data)  # Write string data to in-memory buffer
+        media_type = "application/xml"
+        extension = "xml"
     elif file_format == 'html':
-        df.to_html(file_path, index=False)
+        df.to_html(buffer, index=False)
+        media_type = "text/html"
+        extension = "html"
     else:
         raise HTTPException(status_code=400, detail=f"Unsupported file format: {file_format}")
     
-    logger.info(f"\nfile_format: {file_format}\file_name: {file_name}")
+    # Reset buffer pointer to the start
+    buffer.seek(0)
     
-    # Add a background task to delete the file after sending it
-    background_tasks.add_task(os.remove, file_path)
+    # Define the file name based on the current date and time
+    file_name = f"generated_data_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.{extension}"
+    
+    logger.info(f"\nfile_name: {file_name}")
     
     # Return the generated file as response
-    return FileResponse(file_path, media_type="application/octet-stream", filename=file_name, headers={"Content-Disposition": f"attachment; filename={file_name}"})
+    return StreamingResponse(buffer, media_type=media_type, headers={
+        "Content-Disposition": f"attachment; filename={file_name}"
+    })
 
 # Mount the React build directory for default route
 app.mount("/", StaticFiles(directory="frontend/dist", html=True), name="static")
